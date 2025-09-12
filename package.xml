@@ -11,7 +11,10 @@
   <!-- <buildtool_depend>ament_python</buildtool_depend> -->
 
   <depend>rclpy</depend>
+  <depend>torch</depend>
+
   <depend>robotic_platform_msgs</depend>
+  <depend>ninja-build</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
