@@ -1,0 +1,30 @@
+{
+    "bases"  : null,
+    "parameters" : {
+        "rgb_intrinsic": {
+            "val"  : [
+                        [901.975,     0.000,       658.064],
+                        [  0.000,   901.738,       369.903],
+                        [  0.000,     0.000,          1.000]
+                    ],
+            "dtype": "list",
+            "help" : "RGB camera intrinsic matrix",
+            "level": 5,
+            "range": []
+        },
+
+        "rgb2pcd_mat": {
+            "val"  : [
+                        [1, 0, 0, 0],
+                        [0, 1, 0, 0],
+                        [0, 0, 1, 0],
+                        [0, 0, 0, 1]
+
+                    ],
+            "dtype": "list",
+            "help" : "Transform matrix from RGB camera to point cloud coord",
+            "level": 5,
+            "range": []
+        }
+    }
+}

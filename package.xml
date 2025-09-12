@@ -7,6 +7,10 @@
   <maintainer email="mskwok@hkclr.hk">kms</maintainer>
   <license>TODO: License declaration</license>
 
+  <!-- <buildtool_depend>ament_cmake_python</buildtool_depend> -->
+  <!-- <buildtool_depend>ament_python</buildtool_depend> -->
+
+  <depend>rclpy</depend>
   <depend>robotic_platform_msgs</depend>
 
   <test_depend>ament_copyright</test_depend>

@@ -1,0 +1,124 @@
+{
+    "bases"  : "./cameras/realsense_L515_cam_cfg.json",
+    "parameters" : {
+        "detect_max" : {
+            "val"  : 5,
+            "dtype": "int",
+            "help" : "the number need to detect at most",
+            "level": 0,
+            "range": [1,30]
+        },      
+        "det_checkpoint" : {
+            "val"  : "__PKG_ROOT__/checkpoints/segm/best.onnx",
+            "dtype": "str",
+            "help" : "detection model checkpoint file",
+            "level": 5,
+            "range": []
+        },
+        "recog_reference_root" : {
+            "val"  : "__PKG_ROOT__/checkpoints/ref_imgs",
+            "dtype": "str",
+            "help" : "recognition reference images root",
+            "level": 5,
+            "range": []
+        },
+        "recog_checkpoint" : {
+            "val"  : "__PKG_ROOT__/checkpoints/recog/dinov2_vits14.onnx",
+            "dtype": "str",
+            "help" : "segmentation model checkpoint file",
+            "level": 5,
+            "range": []
+        },
+        "sku_attributes_config" : {
+            "val"  : "__PKG_ROOT__/configs/SKU_attributes_restocking.json",
+            "dtype": "str",
+            "help" : "SKU attributes",
+            "level": 0,
+            "range": []
+        },
+        "seed" : {
+            "val"  : 0,
+            "dtype": "int",
+            "help" : "random seed",
+            "level": 5,
+            "range": []
+        },
+        "cup_radius" : {
+            "val"  : 0.015,
+            "dtype": "float",
+            "help" : "suction cup radius (unit:m)",
+            "level": 0,
+            "range": []
+        },
+        "gripper_radius" : {
+            "val"  : 0.02,
+            "dtype": "float",
+            "help" : "gripper cup radius (unit:m) for collision detection",
+            "level": 0,
+            "range": []
+        },
+        "det_score_thr" : {
+            "val"  : 0.50,
+            "dtype": "float",
+            "help" : "bbox score threshold",
+            "level": 0,
+            "range": []
+        },
+        "camera_z_dir" : {
+            "val"  : [0, 0,  1],
+            "dtype": "list",
+            "help" : "predifined",
+            "level": 1,
+            "range": []
+        },
+        "cup_type" : {
+            "val"  : 1,
+            "dtype": "int",
+            "help" : "suction cup configuration type, 0: single cup 1: two cupy",
+            "level": 1,
+            "range": []
+        },
+        "cup_dist" : {
+            "val"  : 0.04,
+            "dtype": "float",
+            "help" : "two cup distance",
+            "level": 1,
+            "range": []
+        },
+        "roi_x" : {
+            "val"  : 0.1,
+            "dtype": "float",
+            "help" : "1/2 length of camera roi -x to +x to crop scene point cloud",
+            "level": 1,
+            "range": []
+        },
+        "shelf_depth" : {
+            "val"  : 0.9,
+            "dtype": "float",
+            "help" : "shelf depth (m) (inner boundary for point cloud crop)",
+            "level": 1,
+            "range": []
+        },
+        "gripper_depth" : {
+            "val"  : 0.15,
+            "dtype": "float",
+            "help" : "gripper end to camera (m) to remove gripper point cloud",
+            "level": 1,
+            "range": []
+        },
+        "shelf_plane_y" : {
+            "val"  : 0.13,
+            "dtype": "float",
+            "help" : "shelf plane y axis (m) in camera coordinate",
+            "level": 1,
+            "range": []
+        },
+        "device" : {
+            "val"  : "cpu",
+            "dtype": "str",
+            "help" : "cpu, cuda",
+            "level": 1,
+            "range": []
+        }
+    }
+}
