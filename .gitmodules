@@ -1,7 +1,7 @@
 [submodule "Market-vision-restocking_dep"]
 	path = Market-vision-restocking_dep
 	url = https://github.com/HKCLR2021/Market-vision-restocking_dep
-    branch = master
+    branch = dev
 
 [submodule "SensingAlgoBase"]
 	path = SensingAlgoBase
