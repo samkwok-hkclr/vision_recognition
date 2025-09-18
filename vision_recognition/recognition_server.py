@@ -164,7 +164,7 @@ class RecognitionServer(Node):
         """
         # img = ros_utils.msg_to_cv2(request.image, request.image.encoding)
         # FIXME: image encoding is mismatch.
-        img = ros_utils.msg_to_cv2(request.image, "bgr8")
+        img = ros_utils.msg_to_cv2(request.image, request.image.encoding)
         ply_arr = ros_utils.pointcloud2_to_array(request.pointcloud)
         
         return img, ply_arr

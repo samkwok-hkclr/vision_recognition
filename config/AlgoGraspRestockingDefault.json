@@ -1,5 +1,5 @@
 {
-    "bases"  : "./cameras/realsense_L515_cam_cfg.json",
+    "bases"  : "./cameras/realsense_D435_cam_cfg.json",
     "parameters" : {
         "detect_max" : {
             "val"  : 5,
@@ -9,23 +9,9 @@
             "range": [1,30]
         },      
         "det_checkpoint" : {
-            "val"  : "__PKG_ROOT__/checkpoints/segm/best.onnx",
+            "val"  : "__PKG_ROOT__/checkpoints/segm/circlek_yolo11_v0.0.0-demo_20250930.onnx",
             "dtype": "str",
             "help" : "detection model checkpoint file",
-            "level": 5,
-            "range": []
-        },
-        "recog_reference_root" : {
-            "val"  : "__PKG_ROOT__/checkpoints/ref_imgs",
-            "dtype": "str",
-            "help" : "recognition reference images root",
-            "level": 5,
-            "range": []
-        },
-        "recog_checkpoint" : {
-            "val"  : "__PKG_ROOT__/checkpoints/recog/dinov2_vits14.onnx",
-            "dtype": "str",
-            "help" : "segmentation model checkpoint file",
             "level": 5,
             "range": []
         },
@@ -72,7 +58,7 @@
             "range": []
         },
         "cup_type" : {
-            "val"  : 1,
+            "val"  : 0,
             "dtype": "int",
             "help" : "suction cup configuration type, 0: single cup 1: two cupy",
             "level": 1,
@@ -86,9 +72,9 @@
             "range": []
         },
         "roi_x" : {
-            "val"  : 0.1,
+            "val"  : 0.15,
             "dtype": "float",
-            "help" : "1/2 length of camera roi -x to +x to crop scene point cloud",
+            "help" : "1/2 length of camera roi -x to +x to generate grasp point",
             "level": 1,
             "range": []
         },
@@ -99,7 +85,7 @@
             "level": 1,
             "range": []
         },
-        "gripper_depth" : {
+        "gripper_length" : {
             "val"  : 0.15,
             "dtype": "float",
             "help" : "gripper end to camera (m) to remove gripper point cloud",
@@ -107,7 +93,7 @@
             "range": []
         },
         "shelf_plane_y" : {
-            "val"  : 0.13,
+            "val"  : 0.090,
             "dtype": "float",
             "help" : "shelf plane y axis (m) in camera coordinate",
             "level": 1,
@@ -117,6 +103,41 @@
             "val"  : "cpu",
             "dtype": "str",
             "help" : "cpu, cuda",
+            "level": 1,
+            "range": []
+        },
+        "jaw_width" : {
+            "val"  : 0.1,
+            "dtype": "float",
+            "help" : "jaw open width (m)",
+            "level": 1,
+            "range": []
+        },
+        "jaw_height" : {
+            "val"  : 0.016,
+            "dtype": "float",
+            "help" : "jaw height (m)",
+            "level": 1,
+            "range": []
+        },
+        "jaw_depth" : {
+            "val"  : 0.05,
+            "dtype": "float",
+            "help" : "jaw finger point to grasp point (m)",
+            "level": 1,
+            "range": []
+        },
+        "jaw_depth_base" : {
+            "val"  : 0.25,
+            "dtype": "float",
+            "help" : "jaw inner bottom plane to grasp point (m)",
+            "level": 1,
+            "range": []
+        },
+        "jaw_finger_thickness" : {
+            "val"  : 0.01,
+            "dtype": "float",
+            "help" : "jaw finger thickness (m)",
             "level": 1,
             "range": []
         }

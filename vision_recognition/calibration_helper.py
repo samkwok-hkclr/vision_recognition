@@ -8,8 +8,11 @@ from pathlib import Path
 
 import rclpy
 from rclpy.node import Node
-from rclpy.executors import MultiThreadedExecutor, ExternalShutdownException
-from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
+from rclpy.executors import SingleThreadedExecutor
+
+from tf2_ros import TransformException
+from tf2_ros.buffer import Buffer
+from tf2_ros.transform_listener import TransformListener
 
 from std_msgs.msg import Empty
 from geometry_msgs.msg import Pose
@@ -20,59 +23,63 @@ from robotic_platform_msgs.srv import SaveCameraData
 from vision_recognition import ros_utils
 
 class CalibrationHelper(Node):
-    def __init__(self, executor):
+    def __init__(self):
         super().__init__("calibration_helper")
         self.logger = self.get_logger()
-        self.executor_ = executor
 
         self.declare_parameter("folder_name", "calibration_data")
-        self.declare_parameter("ws_name", "robostore_ws")
+        self.declare_parameter("ws_name", "robostore_upper_ws")
         self.declare_parameter("camera_id", 1)
+        self.declare_parameter("tcp", "left_tcp")
 
         self.camera_id_: Final[int] = self.get_parameter('camera_id').get_parameter_value().integer_value
         self.ws_name_ = self.get_parameter('ws_name').get_parameter_value().string_value
         self.folder_name_ = self.get_parameter('folder_name').get_parameter_value().string_value
+        self.tcp_ = self.get_parameter('tcp').get_parameter_value().string_value
+        
         self.path_ = self.get_calibration_folder()
         self.file_ = datetime.now().strftime("%H_%M_%S") + ".csv"
         self.full_path_: Final[str] = str(Path(self.path_) / self.file_)
 
         self.mutex = Lock()
 
+        self.tf_buffer = Buffer()
+        self.tf_listener = TransformListener(self.tf_buffer, self)
+        
         self.exit_flag_ = False
         self.curr_pose_: Pose = Pose()
 
-        self.pose_sub_ = self.create_subscription(Pose, "current_pose", self.pose_cb, 10)
         self.move_sub_ = self.create_subscription(Empty, "next_pose", self.next_step_cb, 10)
 
-        self.save_camera_cli_ = self.create_client(SaveCameraData, "save_camera_data", callback_group=MutuallyExclusiveCallbackGroup())
+        self.save_camera_cli_ = self.create_client(SaveCameraData, "save_camera_data")
 
         self.logger.info(f"Press Ctrl+C to exit")
         self.logger.info(f"camera ID: {self.camera_id_}")
         self.logger.info(f"calibration folder: {self.path_}")
 
+
     def next_step_cb(self, msg: Empty) -> None:
-        if not self.save_camera_cli_.wait_for_service(timeout_sec=2.0):
+        if not self.save_camera_cli_.wait_for_service(timeout_sec=1.0):
             self.logger.warn("Service unavailable. Skipping capture.")
             return
  
-        tmp = list()
-        with self.mutex:
-            tmp.append(self.curr_pose_.position.x)
-            tmp.append(self.curr_pose_.position.y)
-            tmp.append(self.curr_pose_.position.z)
-            tmp.append(self.curr_pose_.orientation.x)
-            tmp.append(self.curr_pose_.orientation.y)
-            tmp.append(self.curr_pose_.orientation.z)
-            tmp.append(self.curr_pose_.orientation.w)
-
-        self.write_to_csv(tmp)
+        g_b__tcp = self.get_tf("base_footprint", self.tcp_)
+        if (g_b__tcp is None):
+            self.logger.info(f"{self.tcp_} does not found")
+            return
+        
+        x = g_b__tcp.transform.translation.x
+        y = g_b__tcp.transform.translation.y
+        z = g_b__tcp.transform.translation.z
+        qx = g_b__tcp.transform.rotation.x
+        qy = g_b__tcp.transform.rotation.y
+        qz = g_b__tcp.transform.rotation.z
+        qw = g_b__tcp.transform.rotation.w
+        self.write_to_csv([x, y, z, qx, qy, qz, qw])
 
         req = SaveCameraData.Request()
         req.camera_id = self.camera_id_
         req.type = CameraDataType.IMAGE
-
-        def _future_done(future):
-            self.logger.info("captured image")
 
         try:
             future = self.save_camera_cli_.call_async(req)
@@ -87,11 +94,17 @@ class CalibrationHelper(Node):
             self.logger.error(f"Service call failed: {str(e)}")
 
         
-    def pose_cb(self, msg: Pose) -> None:
-        with self.mutex:
-            self.curr_pose_ = msg
-            self.logger.debug(str(self.curr_pose_))
-
+    def get_tf(self, parent: str, child: str):
+        try:
+            trans = self.tf_buffer.lookup_transform(
+                parent,
+                child,
+                rclpy.time.Time())
+            return trans
+        except TransformException as ex:
+            self.get_logger().info(f'Could not transform {parent} to {child}: {ex}')
+            
+                
     def get_calibration_folder(self) -> str:
         home = os.getenv("HOME")
         if home is None:
@@ -138,9 +151,8 @@ class CalibrationHelper(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    executor = MultiThreadedExecutor()
-    node = CalibrationHelper(executor)
-
+    executor = SingleThreadedExecutor()
+    node = CalibrationHelper()
     executor.add_node(node)
 
     try:

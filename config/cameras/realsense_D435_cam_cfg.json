@@ -3,9 +3,21 @@
     "parameters" : {
         "rgb_intrinsic": {
             "val"  : [
-                        [901.975,     0.000,       658.064],
-                        [  0.000,   901.738,       369.903],
-                        [  0.000,     0.000,          1.000]
+                        [906.90      ,   0.0      ,       643.15],
+                        [  0.0       ,   906.50   ,       377.83],
+                        [  0.0       ,   0.0      ,          1.0]
+                    ],
+            "dtype": "list",
+            "help" : "RGB camera intrinsic matrix",
+            "level": 5,
+            "range": []
+        },
+
+        "rgb_intrinsic_right": {
+            "val"  : [
+                        [906.58      ,   0.0      ,       638.26],
+                        [  0.0       ,   906.29   ,       355.87],
+                        [  0.0       ,   0.0      ,          1.0]
                     ],
             "dtype": "list",
             "help" : "RGB camera intrinsic matrix",

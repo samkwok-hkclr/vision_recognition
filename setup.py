@@ -1,7 +1,7 @@
 import os
 from glob import glob
 from setuptools import find_packages, setup
-from torch.utils import cpp_extension
+# from torch.utils import cpp_extension
 
 # python3 setup.py build_ext --inplace --verbose
 
@@ -47,17 +47,17 @@ setup(
     name=package_name,
     version='0.0.1',
     packages=find_packages(exclude=['test']),
-    ext_modules=[        
-        cpp_extension.CUDAExtension(
-            name='multicamregistration_cpp', 
-            sources=[
-                f'{SEN_ALGO_BASE_ROOT}/{MULTI_CAM_REG_NAME}/MultiCamRegistration.cpp', 
-                f'{SEN_ALGO_BASE_ROOT}/{MULTI_CAM_REG_NAME}/MultiCamRegistration_cuda.cu', 
-            ],
-            extra_compile_args={'cxx': ['-g', '-std=c++17']},
-        ),
-    ],
-    cmdclass={'build_ext': cpp_extension.BuildExtension},
+    # ext_modules=[        
+    #     cpp_extension.CUDAExtension(
+    #         name='multicamregistration_cpp', 
+    #         sources=[
+    #             f'{SEN_ALGO_BASE_ROOT}/{MULTI_CAM_REG_NAME}/MultiCamRegistration.cpp', 
+    #             f'{SEN_ALGO_BASE_ROOT}/{MULTI_CAM_REG_NAME}/MultiCamRegistration_cuda.cu', 
+    #         ],
+    #         extra_compile_args={'cxx': ['-g', '-std=c++17']},
+    #     ),
+    # ],
+    # cmdclass={'build_ext': cpp_extension.BuildExtension},
 
     data_files=package_files(
         data_files, [
@@ -69,7 +69,7 @@ setup(
         ),
     install_requires=[
         'setuptools==58.2.0',
-        'torch',
+        # 'torch',
         ],
     zip_safe=True,
     maintainer='mskwok',
