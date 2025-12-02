@@ -30,7 +30,7 @@ class CalibrationHelper(Node):
         self.declare_parameter("folder_name", "calibration_data")
         self.declare_parameter("ws_name", "robostore_upper_ws")
         self.declare_parameter("camera_id", 1)
-        self.declare_parameter("tcp", "left_tcp")
+        self.declare_parameter("tcp", "right_tcp")
 
         self.camera_id_: Final[int] = self.get_parameter('camera_id').get_parameter_value().integer_value
         self.ws_name_ = self.get_parameter('ws_name').get_parameter_value().string_value
